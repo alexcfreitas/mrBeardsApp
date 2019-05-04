@@ -1,0 +1,35 @@
+{% extends "_layouts/default.njk" %} {% block body %}
+<div class="content">
+    <strong>Seus agendamentos</strong>
+    <p>Veja abaixo a lista de agendamentos que você tem para hoje:</p>
+  <div class="provider">
+    <div>
+      <img src="/files/{{ user.avatar }}" />
+      <strong>{{ user.name }}</strong>
+    </div>
+  </div>
+
+
+    <input type="text" class="flatpickr" placeholder="Escolha o dia" />
+
+    <div id="hours"></div>
+    <a href="/app/logout" class="logout">Sair</a>
+</div>
+
+<script type="text/javascript">
+  flatpickr('.flatpickr', {
+    minDate: new Date(),
+    dateFormat: 'd/m/Y',
+    onChange: function(date) {
+      fetch(`/app/appointments/{{ user.id }}?date=${date[0].getTime()}`).then(
+        function(response) {
+          response.text().then(function(html) {
+            document.getElementById('hours').innerHTML = html;
+          });
+        }
+      );
+    }
+  });
+</script>
+
+{% endblock %}

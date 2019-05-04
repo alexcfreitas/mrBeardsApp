@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  database:
+    image: kartoza/postgis
+
+  app:
+    build: .
+    ports:
+      - '3000:3000'
+    environment:
+      - DB_URL=database
+    command: yarn start
+    depends_on:
+      - database
+    volumes:
+      - '.:/usr/app'
